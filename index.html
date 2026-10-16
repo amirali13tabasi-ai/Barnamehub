@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>برنامه هاب</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f6f5c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="برنامه هاب">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1d2421;--mute:#6d756f;--line:#e4e1d9;--ac:#1f6f5c;--ac-t:#fff;--fs:16px;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141816;--card:#1e2421;--ink:#eceee9;--mute:#98a29b;--line:#2c3430}}
+:root[data-theme="dark"]{--bg:#141816;--card:#1e2421;--ink:#eceee9;--mute:#98a29b;--line:#2c3430}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Vazirmatn,Tahoma,sans-serif;font-size:var(--fs)}
+body{max-width:520px;margin:0 auto;padding:0 16px 110px}
+h1{font-size:1.5em;font-weight:800;margin:20px 0 2px}
+.sub{color:var(--mute);font-size:.88em;margin:0 0 14px}
+.days{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none}
+.d{flex:0 0 auto;width:54px;padding:8px 0;border-radius:14px;border:1px solid var(--line);background:var(--card);text-align:center;color:var(--ink);font:inherit;cursor:pointer}
+.d small{display:block;color:var(--mute);font-size:.72em}
+.d b{font-size:1.15em}
+.d.on{background:var(--ac);color:var(--ac-t);border-color:var(--ac)}
+.d.on small{color:inherit;opacity:.85}
+.sum{display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px;font-weight:600}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;background:var(--ac);width:0;transition:width .3s}
+.t{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.ck{flex:0 0 26px;width:26px;height:26px;border-radius:50%;border:2px solid var(--ac);background:none;color:var(--ac-t);font-size:15px;cursor:pointer;padding:0}
+.t.done .ck{background:var(--ac)}
+.t.done .tt{text-decoration:line-through;color:var(--mute)}
+.tx{flex:1;min-width:0}
+.tt{font-weight:600;overflow-wrap:anywhere}
+.tm{color:var(--mute);font-size:.8em;margin-top:2px}
+.x{background:none;border:0;color:var(--mute);font-size:1.3em;cursor:pointer;padding:4px 8px}
+.empty{text-align:center;color:var(--mute);padding:40px 10px;line-height:2}
+.fab{position:fixed;bottom:calc(76px + env(safe-area-inset-bottom,0px));inset-inline-start:max(16px,calc(50% - 244px));width:58px;height:58px;border-radius:50%;border:0;background:var(--ac);color:var(--ac-t);font-size:30px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25);z-index:5}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:4}
+nav button{flex:1;padding:14px 0;background:none;border:0;font:inherit;color:var(--mute);cursor:pointer}
+nav button.on{color:var(--ac);font-weight:800}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;z-index:10}
+.sheet.show{display:flex}
+.sh{width:100%;max-width:520px;margin:0 auto;background:var(--card);border-radius:22px 22px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px))}
+label{display:block;font-size:.85em;color:var(--mute);margin:12px 0 4px}
+input[type=text],input[type=date],input[type=time],select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.row{display:flex;gap:10px}.row>div{flex:1}
+.chk{display:flex;align-items:center;gap:8px;margin:14px 0 0;color:var(--ink);font-size:.95em}
+.chk input{width:20px;height:20px;accent-color:var(--ac)}
+.btn{width:100%;margin-top:18px;padding:14px;border:0;border-radius:14px;background:var(--ac);color:var(--ac-t);font:inherit;font-weight:800;cursor:pointer}
+.btn.g{background:var(--bg);color:var(--ink);border:1px solid var(--line);margin-top:10px}
+.sw{display:flex;gap:10px;flex-wrap:wrap}
+.sw button{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer}
+.sw button.on{border-color:var(--ink)}
+.seg{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{flex:1;padding:10px;border:0;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
+.seg button.on{background:var(--ac);color:var(--ac-t)}
+.toast{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:var(--ac);color:var(--ac-t);padding:12px 18px;border-radius:14px;z-index:20;display:none;max-width:90%;font-weight:600}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<main id="home">
+  <h1 id="hi"></h1>
+  <p class="sub" id="dt"></p>
+  <div class="days" id="days"></div>
+  <div class="sum"><span id="cnt"></span><span id="pct"></span></div>
+  <div class="bar"><i id="bar"></i></div>
+  <div id="list"></div>
+</main>
+<main id="set" hidden>
+  <h1>شخصی‌سازی</h1>
+  <p class="sub">ظاهر برنامه را مطابق سلیقه‌ات تنظیم کن.</p>
+  <label>نام شما</label><input type="text" id="sName">
+  <label>رنگ برنامه</label><div class="sw" id="sw"></div>
+  <label>حالت نمایش</label>
+  <div class="seg" id="thm"><button data-v="auto">خودکار</button><button data-v="light">روشن</button><button data-v="dark">تیره</button></div>
+  <label>اندازه متن</label>
+  <div class="seg" id="fsz"><button data-v="14">کوچک</button><button data-v="16">متوسط</button><button data-v="19">بزرگ</button></div>
+  <label>یادآوری با اعلان</label>
+  <button class="btn g" id="notif">فعال‌سازی اعلان</button>
+  <label>نصب روی گوشی</label>
+  <p class="sub" style="line-height:1.9">آیفون: Safari ← دکمه اشتراک‌گذاری ← «افزودن به صفحه اصلی».<br>اندروید: Chrome ← منوی سه‌نقطه ← «نصب برنامه» یا «افزودن به صفحه اصلی».</p>
+</main>
+<button class="fab" id="add" aria-label="کار جدید">+</button>
+<nav><button id="n1" class="on">برنامه</button><button id="n2">تنظیمات</button></nav>
+
+<div class="sheet" id="sheet"><div class="sh">
+  <b style="font-size:1.15em">کار جدید</b>
+  <label>عنوان</label><input type="text" id="fT" placeholder="مثلاً: جلسه کاری">
+  <div class="row"><div><label>تاریخ</label><input type="date" id="fD"></div><div><label>ساعت</label><input type="time" id="fH"></div></div>
+  <label class="chk"><input type="checkbox" id="fR"> هر روز تکرار شود (برنامه روزانه)</label>
+  <label class="chk"><input type="checkbox" id="fN" checked> یادآوری در ساعت تعیین‌شده</label>
+  <button class="btn" id="save">ذخیره</button>
+  <button class="btn g" id="cancel">انصراف</button>
+</div></div>
+
+<script>
+(function(){
+var COL=['#1f6f5c','#2f5fd0','#8e44ad','#d1495b','#e07a1f','#444b55'];
+var S={tasks:[],done:{},set:{name:'',ac:COL[0],theme:'auto',fs:'16'}};
+function ld(){try{var r=localStorage.getItem('planner-v1');if(r){var o=JSON.parse(r);S.tasks=o.tasks||[];S.done=o.done||{};S.set=Object.assign(S.set,o.set||{})}}catch(e){}}
+function sv(){try{localStorage.setItem('planner-v1',JSON.stringify(S))}catch(e){}}
+function $(i){return document.getElementById(i)}
+var fa=function(o,d){return new Intl.DateTimeFormat('fa-IR-u-ca-persian',o).format(d)};
+function iso(d){var m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(x<10?'0':'')+x}
+function pd(s){var p=s.split('-');return new Date(+p[0],p[1]-1,+p[2])}
+var sel=iso(new Date());
+
+function apply(){
+  var r=document.documentElement,s=S.set;
+  r.style.setProperty('--ac',s.ac);r.style.setProperty('--fs',s.fs+'px');
+  if(s.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',s.theme);
+  var m=document.querySelector('meta[name=theme-color]');if(m)m.content=s.ac;
+}
+function forDay(d){
+  return S.tasks.filter(function(t){return t.date===d||(t.repeat&&t.date<=d)})
+   .sort(function(a,b){return (a.time||'99:99')<(b.time||'99:99')?-1:1});
+}
+function render(){
+  var now=new Date(),h=now.getHours();
+  var g=h<5?'شب بخیر':h<12?'صبح بخیر':h<17?'ظهر بخیر':h<20?'عصر بخیر':'شب بخیر';
+  $('hi').textContent=g+(S.set.name?'، '+S.set.name:'');
+  $('dt').textContent=fa({weekday:'long',day:'numeric',month:'long',year:'numeric'},pd(sel));
+  var box=$('days');box.innerHTML='';
+  var base=new Date();
+  for(var i=-1;i<13;i++){
+    var d=new Date(base.getFullYear(),base.getMonth(),base.getDate()+i),k=iso(d);
+    var b=document.createElement('button');b.className='d'+(k===sel?' on':'');
+    b.innerHTML='<small>'+fa({weekday:'short'},d)+'</small><b>'+fa({day:'numeric'},d)+'</b>';
+    b.onclick=(function(k){return function(){sel=k;render()}})(k);box.appendChild(b);
+  }
+  var on=box.querySelector('.on');if(on&&on.scrollIntoView&&!render.once){render.once=1;on.scrollIntoView({inline:'center',block:'nearest'})}
+  var L=forDay(sel),n=0,list=$('list');list.innerHTML='';
+  L.forEach(function(t){
+    var dn=!!S.done[t.id+'|'+sel];if(dn)n++;
+    var e=document.createElement('div');e.className='t'+(dn?' done':'');
+    var meta=(t.time?t.time.replace(/\d/g,function(c){return '۰۱۲۳۴۵۶۷۸۹'[c]}):'بدون ساعت')+(t.repeat?' • روزانه':'');
+    e.innerHTML='<button class="ck" aria-label="انجام شد">'+(dn?'✓':'')+'</button><div class="tx"><div class="tt"></div><div class="tm">'+meta+'</div></div><button class="x" aria-label="حذف">×</button>';
+    e.querySelector('.tt').textContent=t.title;
+    e.querySelector('.ck').onclick=function(){var k=t.id+'|'+sel;if(S.done[k])delete S.done[k];else S.done[k]=1;sv();render()};
+    e.querySelector('.x').onclick=function(){if(confirm('این کار حذف شود؟')){S.tasks=S.tasks.filter(function(z){return z.id!==t.id});sv();render()}};
+    list.appendChild(e);
+  });
+  if(!L.length)list.innerHTML='<div class="empty">برای این روز کاری ثبت نشده.<br>با دکمه + یک کار اضافه کن.</div>';
+  var f=function(x){return x.toLocaleString('fa-IR')};
+  $('cnt').textContent=f(n)+' از '+f(L.length)+' کار انجام شد';
+  var p=L.length?Math.round(n/L.length*100):0;$('pct').textContent=f(p)+'٪';$('bar').style.width=p+'%';
+}
+function toast(m){var t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(function(){t.style.display='none'},6000)}
+
+/* add sheet */
+$('add').onclick=function(){$('fT').value='';$('fD').value=sel;$('fH').value='';$('fR').checked=false;$('sheet').classList.add('show');setTimeout(function(){$('fT').focus()},50)};
+$('cancel').onclick=function(){$('sheet').classList.remove('show')};
+$('sheet').onclick=function(e){if(e.target===this)this.classList.remove('show')};
+$('save').onclick=function(){
+  var t=$('fT').value.trim();if(!t){$('fT').focus();return}
+  S.tasks.push({id:'t'+Date.now(),title:t,date:$('fD').value||sel,time:$('fH').value,repeat:$('fR').checked,notify:$('fN').checked});
+  sv();sel=$('fD').value||sel;$('sheet').classList.remove('show');render();
+};
+
+/* nav */
+function tab(a){$('home').hidden=!a;$('set').hidden=a;$('add').style.display=a?'':'none';$('n1').className=a?'on':'';$('n2').className=a?'':'on'}
+$('n1').onclick=function(){tab(true)};$('n2').onclick=function(){tab(false)};
+
+/* settings */
+function seg(id,key){
+  var b=$(id).querySelectorAll('button');
+  function mark(){b.forEach(function(x){x.classList.toggle('on',x.dataset.v===S.set[key])})}
+  b.forEach(function(x){x.onclick=function(){S.set[key]=x.dataset.v;sv();apply();mark()}});mark();
+}
+function swatches(){
+  var w=$('sw');w.innerHTML='';
+  COL.forEach(function(c){var b=document.createElement('button');b.style.background=c;b.className=c===S.set.ac?'on':'';b.setAttribute('aria-label','رنگ');
+   b.onclick=function(){S.set.ac=c;sv();apply();swatches()};w.appendChild(b)});
+}
+$('sName').oninput=function(){S.set.name=this.value;sv();render()};
+$('notif').onclick=function(){
+  if(!('Notification' in window)){toast('این مرورگر از اعلان پشتیبانی نمی‌کند. یادآوری فقط داخل برنامه نمایش داده می‌شود.');return}
+  Notification.requestPermission().then(function(p){toast(p==='granted'?'اعلان فعال شد':'اجازه اعلان داده نشد')});
+};
+
+/* reminders (while app is open) */
+var fired={};
+function tick(){
+  var n=new Date(),k=iso(n),hm=('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2);
+  forDay(k).forEach(function(t){
+    var key=t.id+k+hm;
+    if(t.notify&&t.time===hm&&!S.done[t.id+'|'+k]&&!fired[key]){
+      fired[key]=1;toast('⏰ '+t.title);
+      try{if(window.Notification&&Notification.permission==='granted')new Notification(t.title,{body:'زمان انجام این کار رسیده است'})}catch(e){}
+    }
+  });
+}
+setInterval(tick,15000);
+
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){})})}
+
+ld();apply();$('sName').value=S.set.name;swatches();seg('thm','theme');seg('fsz','fs');render();tick();
+})();
+</script>
+</body>
+</html>
